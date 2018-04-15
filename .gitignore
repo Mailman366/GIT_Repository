@@ -102,3 +102,4 @@ ENV/
 
 /Common/Email/Config/config.ini
 /Common/Email/Python/__pycache__
+.idea
