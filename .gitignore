@@ -99,3 +99,19 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+
+.idea\*/
+Common/Email/Python/__pycache__
+/
+.gitignore
+/
+.idea/workspace.xml/
+.idea/.idea/*
+/Common/Email/Python/email_conf.py
+/Common/Email/Config/email_conf.py
+/Common/Email/Config
+/.idea
+
+
