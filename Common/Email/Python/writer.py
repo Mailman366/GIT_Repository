@@ -11,12 +11,12 @@
 import os
 import smtplib
 from email.mime.text import MIMEText
-from configparser import ConfigParser
+from ConfigParser import RawConfigParser
 from email.mime.multipart import MIMEMultipart
 
-EMAIL_ROOT = os.chdir('..')
 CONFIG_FILE = 'config.ini'
-CONFIG_PATH = os.path.join('Config', CONFIG_FILE)
+PARENT_PATH = os.path.abspath(os.path.join(__file__ ,"../.."))
+CONFIG_PATH = os.path.join(PARENT_PATH, CONFIG_FILE)
 
 
 # Exceptions
@@ -73,7 +73,12 @@ class EmailWriter(object):
 
     def read_config(self):
         """Reads a config file to obtain email credentials"""
-        config = ConfigParser()
+
+        # Verify config file exists
+        print(CONFIG_PATH)
+        if not os.path.exists(CONFIG_PATH):
+            raise IOError("Unable to find config.ini!")
+
+        config = RawConfigParser()
         config.read(CONFIG_PATH)
         return (config.get('CREDENTIALS', 'username'),  config.get('CREDENTIALS', 'password'))
-
