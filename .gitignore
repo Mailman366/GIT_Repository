@@ -100,6 +100,7 @@ ENV/
 # mypy
 .mypy_cache/
 
-/Common/Email/Config/config.ini
+# Custom Adds
 /Common/Email/Python/__pycache__
 .idea
+/Common/Email/config.ini
