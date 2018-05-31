@@ -104,3 +104,4 @@ ENV/
 /Common/Email/Python/__pycache__
 .idea
 /Common/Email/config.ini
+/Projects/Overwatch/Output

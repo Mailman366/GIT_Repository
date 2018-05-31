@@ -75,7 +75,6 @@ class EmailWriter(object):
         """Reads a config file to obtain email credentials"""
 
         # Verify config file exists
-        print(CONFIG_PATH)
         if not os.path.exists(CONFIG_PATH):
             raise IOError("Unable to find config.ini!")
 
