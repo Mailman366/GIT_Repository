@@ -3,6 +3,7 @@ import cv2
 import time
 import sys
 from datetime import datetime
+from argparse import ArgumentParser
 
 class detect_change(object):
     """
@@ -212,13 +213,18 @@ class detect_change(object):
 
         return
 
+def parse_args():
+    p = ArgumentParser(description='Overwatch ArgParse')
 
+    p.add_argument('-s', '--seconds', help='sum the integers (default: find the max)', required=True, type=int)
+    return p.parse_args()
 
 if __name__ == "__main__":
     print("Starting..")
+    args = parse_args()
     with detect_change() as a:
         a.clear_picture_folder()
         a._reset_initial_frame()
-        a._get_frames(120)
+        a._get_frames(args.seconds)
 
     print("Complete!")
