@@ -3,17 +3,22 @@ import cv2
 import time
 import sys
 from datetime import datetime
+from argparse import ArgumentParser
+
+
+# TODO Check if comparisons with Gray images provide better change detection
+# TODO Generalize for more applications
 
 class detect_change(object):
     """
-    By default captures video in 720p    
+    By default captures video in 480p    
     """
 
     # Misc Constants
     SEVEN_TWENTY_RESOLUTION = (1280, 720)
     FOUR_EIGHTY_RESOLUTION = (640, 480)
 
-    def __init__(self, resolution=SEVEN_TWENTY_RESOLUTION, focus_areas=[], trigger_email=False):
+    def __init__(self, resolution=FOUR_EIGHTY_RESOLUTION, focus_areas=[], trigger_email=False):
         print("Starting detect_change..")
         self.resolution = resolution
         self.focus_areas = focus_areas
@@ -69,9 +74,9 @@ class detect_change(object):
 
         # Initial Steps #
 
-        # Ramp-up Camera for 30 frames
+        # Ramp-up Camera for 10 frames
         print("Ramping up camera..")
-        self._calibrate_frames(v, frames=30)
+        self._calibrate_frames(v, frames=10)
 
         if v.isOpened():
             return v
@@ -189,11 +194,11 @@ class detect_change(object):
 
         # Video Writing Object
         vo = cv2.VideoWriter(os.path.join(self.output_path, "{}{}".format(time_stamp, self.video_ext)), self.fourcc, 15.0,
-                             self.SEVEN_TWENTY_RESOLUTION)
+                             self.resolution)
 
         # Text overlay
         font = cv2.FONT_HERSHEY_SIMPLEX
-        bottomLeftCornerOfText = (10, 700)
+        bottomLeftCornerOfText = (10, int(round(self.resolution[1]*0.95)))
         fontScale = 1
         fontColor = (255, 255, 255)
         lineType = 2
@@ -208,17 +213,23 @@ class detect_change(object):
                             fontScale,
                             fontColor,
                             lineType)
-                vo.write(frame)
+                #vo.write(frame)
+                vo.write(cv2.addWeighted(frame, 0.6, self.initial_frame, 0.4, 0))
 
         return
 
+def parse_args():
+    p = ArgumentParser(description='Overwatch ArgParse')
 
+    p.add_argument('-s', '--seconds', help='sum the integers (default: find the max)', required=True, type=int)
+    return p.parse_args()
 
 if __name__ == "__main__":
     print("Starting..")
+    args = parse_args()
     with detect_change() as a:
         a.clear_picture_folder()
         a._reset_initial_frame()
-        a._get_frames(120)
+        a._get_frames(args.seconds)
 
     print("Complete!")
